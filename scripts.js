@@ -2,12 +2,14 @@
 let playerScore = 0
 let computerScore = 0
 
+// Get the computer choice
 function getComputerChoice()
 {
     const choices = ["ROCK", "PAPER", "SCISSORS"]
     return choices[Math.floor(Math.random() * choices.length)]
 }
 
+// Play a round and return the result
 function playRound(playerSelection, computerSelection)
 {   
     // Win Round
@@ -32,6 +34,7 @@ function playRound(playerSelection, computerSelection)
     return -1
 }
 
+// Play a game set of 5 rounds and return the result
 function game()
 {
     // Play until one of the player gets 5 points
