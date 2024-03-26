@@ -1,69 +1,67 @@
 
-let playerScore = 0
-let computerScore = 0
 
-// Get the computer choice
+const playerChoices = document.querySelectorAll("#choice");
+const gameResult = document.getElementById("gameResults");
+const currentRound = document.createElement("p")
+gameResult.appendChild(currentRound);
+
+// Initialize Players Score 
+let playerScore = 0;
+let computerScore = 0;
+
+// Add a listener to every player options and run a round
+playerChoices.forEach((choices) => {
+    choices.addEventListener("click", () => {
+    playRound(choices.textContent);
+    })    
+})
+
+// Get computer random choice
 function getComputerChoice()
 {
-    const choices = ["ROCK", "PAPER", "SCISSORS"]
+    const choices = ["Rock", "Paper", "Scissors"]
     return choices[Math.floor(Math.random() * choices.length)]
 }
 
-// Play a round and return the result
-function playRound(playerSelection, computerSelection)
-{   
-    // Win Round
-    if((playerSelection == "ROCK" && computerSelection == "SCISSORS")||
-       (playerSelection == "PAPER" && computerSelection == "ROCK") ||
-       (playerSelection == "SCISSORS" && computerSelection == "PAPER"))
+// Update Game Score
+function updateScore() {
+    document.getElementById("score").textContent = `Player: ${playerScore} | Computer: ${computerScore}`;
+}
+
+// End Game after either the player or computer get 5 points
+function endGame() {
+    if(playerScore >= 5)
     {
-        playerScore++
-        console.log(`You Win! Player Chose ${playerSelection} beats Computer chose ${computerSelection}`)
-        return 1        
+        currentRound.textContent = "Player WIN - GAME OVER";
     }
-    // Round Tie
-    else if(playerSelection == computerSelection)
-    {
-        console.log(`It's a Tie, you both picked ${computerSelection}`)
-        return 0
+    else if (computerScore >= 5) {
+        currentRound.textContent = "Computer WIN - GAME OVER";
+    }
+}
+
+// Play a round and return the result
+function playRound(playerSelection)
+{   
+    const computerSelection = getComputerChoice();
+
+    // Win Round
+    if((playerSelection == "Rock" && computerSelection == "Scissors")||
+       (playerSelection == "Paper" && computerSelection == "Rock") ||
+       (playerSelection == "Scissors" && computerSelection == "Paper")) {
+        currentRound.textContent = `You Win! Player Chose ${playerSelection} beats Computer chose ${computerSelection}`;
+        playerScore++    
+    }
+    // Tie Round
+    else if(playerSelection == computerSelection) {
+        currentRound.textContent = `It's a Tie, you both picked ${computerSelection}`;
+    }
+    // Lose Round
+    else {
+        currentRound.textContent = `You Lose! Computer chose ${computerSelection} beats Player chose ${playerSelection}`;
+        computerScore++
     }
     
-    // Lose Round
-    computerScore++
-    console.log( `You Lose! Computer chose ${computerSelection} beats Player chose ${playerSelection}`)
-    return -1
+    updateScore()
+    endGame()
+    return;
 }
-
-// Play a game set of 5 rounds and return the result
-function game()
-{
-    // Play until one of the player gets 5 points
-    for(let i = 0; i < 5; i++)
-    {
-        let computerSelection = getComputerChoice()
-        let playerSelection = prompt("Enter your Choice - Rock, Paper, Scissor")
-        playerSelection = playerSelection.toUpperCase()
-
-        let result = playRound(playerSelection, computerSelection)
-        if(result == 0) {
-            i--;
-        }
-    }
-
-    // Win Game
-    if(playerScore > computerScore)
-    {
-       return `You Won the game, Player: ${playerScore} vs Computer: ${computerScore}`
-    }
-    // Tie Game
-    else if(playerScore == computerScore){
-        return ` It's a Tie,  Player: ${playerScore} vs Computer: ${computerScore}`
-    }
-
-    // Lose Game
-    return `You Lose the game, Computer: ${computerScore} vs Player: ${playerScore}`
-
-
-}
-
-console.log(game())
